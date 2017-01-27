@@ -40,12 +40,16 @@ OOBCurve = function(mod, measures = list(auc), task) {
     prob_array[, , i] = predis * (1 / rowCumsums((inbag == 0) * 1)) # divide by the number of observations that are out of bag
     #prob_array[, , i] = predis %*% diag(1/(1:ntree))
   }
-  result = data.frame(t(apply(prob_array, 2, function(x) calculateMlrMeasure(x, measures))))
+  result = data.frame(t(apply(prob_array, 2, function(x) calculateMlrMeasure(x, measures, task, truth))))
   return(result)
 }
 
-calculateMlrMeasure = function(x, measures) {
-  mlrpred = mlr::makePrediction(task.desc = taskmlr$task.desc, row.names = names(truth), id = names(truth), truth = truth,
+calculateMlrMeasure = function(x, measures, task, truth) {
+  mlrpred = mlr::makePrediction(task.desc = task$task.desc, row.names = names(truth), id = names(truth), truth = truth,
     predict.type = "prob", predict.threshold = 0.5, y = x, time = NA)
   performance(mlrpred, measures)
+}
+
+rowCumsums = function(x) {
+  t(apply(x, 1, cumsum))
 }
