@@ -16,6 +16,8 @@
 #' @examples
 #' library(mlr)
 #' library(randomForest)
+#' 
+#' # Classification
 #' data = getTaskData(sonar.task)
 #' mod = randomForest(Class ~., data = data, ntree = 100, keep.inbag = TRUE)
 #' results = OOBCurve(mod, measures = list(mmce, auc, brier), task = sonar.task)
@@ -24,29 +26,47 @@
 #' plot(results$auc, type = "l", ylab = "oob-auc", xlab = "ntrees")
 #' plot(results$brier, type = "l", ylab = "oob-brier-score", xlab = "ntrees")
 #' 
+#' # Regression
+#' data = getTaskData(bh.task)
+#' mod = randomForest(medv ~., data = data, ntree = 100, keep.inbag = TRUE)
+#' results = OOBCurve(mod, measures = list(mse, mae), task = bh.task)
+# Plot the generated results
+#' plot(results$mse, type = "l", ylab = "oob-mse", xlab = "ntrees")
+#' plot(results$mae, type = "l", ylab = "oob-mae", xlab = "ntrees")
+#' 
 OOBCurve = function(mod, measures = list(auc), task) {
+  tasktype = getTaskType(task)
   truth = mod$y
   preds = predict(mod, newdata = data, predict.all = TRUE)
   inbag = mod$inbag
   ntree = ncol(preds$individual)
   nobs = nrow(preds$individual)
-  num_levels = nlevels(preds$aggr)
-  pred_levels = levels(preds$aggr)
-  prob_array = array(data = NA, dim = c(nobs, ntree, num_levels), dimnames = list(NULL, NULL, pred_levels))
-  for(i in 1:length(pred_levels)) {
-    predis = (preds$individual == pred_levels[i]) * 1
-    predis = predis * ((inbag == 0) * 1) # only use observations that are out of bag
-    predis = rowCumsums(predis)
-    prob_array[, , i] = predis * (1 / rowCumsums((inbag == 0) * 1)) # divide by the number of observations that are out of bag
-    #prob_array[, , i] = predis %*% diag(1/(1:ntree))
+  
+  if (tasktype == "classif") {
+    num_levels = nlevels(preds$aggr)
+    pred_levels = levels(preds$aggr)
+    prob_array = array(data = NA, dim = c(nobs, ntree, num_levels), dimnames = list(NULL, NULL, pred_levels))
+    for(i in 1:length(pred_levels)) {
+      predis = (preds$individual == pred_levels[i]) * 1
+      predis = predis * ((inbag == 0) * 1) # only use observations that are out of bag
+      predis = rowCumsums(predis)
+      prob_array[, , i] = predis * (1 / rowCumsums((inbag == 0) * 1)) # divide by the number of observations that are out of bag
+      #prob_array[, , i] = predis %*% diag(1/(1:ntree))
+    }
+    result = data.frame(t(apply(prob_array, 2, function(x) calculateMlrMeasure(x, measures, task, truth, predict.type = "prob"))))
   }
-  result = data.frame(t(apply(prob_array, 2, function(x) calculateMlrMeasure(x, measures, task, truth))))
+  
+  if (tasktype == "regr") {
+    preds$individual[inbag!=0] = 0 # only use observations that are out of bag
+    predis = rowCumsums(preds$individual) * (1 / rowCumsums((inbag == 0) * 1))
+    result = data.frame(t(apply(predis, 2, function(x) calculateMlrMeasure(x, measures, task, truth, predict.type = "response"))))
+  }
   return(result)
 }
 
-calculateMlrMeasure = function(x, measures, task, truth) {
+calculateMlrMeasure = function(x, measures, task, truth, predict.type) {
   mlrpred = mlr::makePrediction(task.desc = task$task.desc, row.names = names(truth), id = names(truth), truth = truth,
-    predict.type = "prob", predict.threshold = 0.5, y = x, time = NA)
+    predict.type = predict.type, predict.threshold = 0.5, y = x, time = NA)
   performance(mlrpred, measures)
 }
 
