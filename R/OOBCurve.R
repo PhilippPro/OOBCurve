@@ -9,9 +9,9 @@
 #' @param measures
 #'   List of performance measure(s) of mlr to evaluate. Default is auc only.
 #' @param task
-#'   Learning task
+#'   Learning task created by the function makeClassifTask or makeRegrTask of mlr. 
 #' @return
-#'   Returns a dataframe with a column for each desired measure
+#'   Returns a dataframe with a column for each desired measure.
 #' @export
 #' @examples
 #' library(mlr)
@@ -34,39 +34,38 @@
 #' plot(results$mse, type = "l", ylab = "oob-mse", xlab = "ntrees")
 #' plot(results$mae, type = "l", ylab = "oob-mae", xlab = "ntrees")
 #' 
-OOBCurve = function(mod, measures = list(auc), task) {
+OOBCurve = function(mod, measures = list(auc), task, data) {
   tasktype = getTaskType(task)
   truth = mod$y
   preds = predict(mod, newdata = data, predict.all = TRUE)
   inbag = mod$inbag
-  ntree = ncol(preds$individual)
-  nobs = nrow(preds$individual)
   
   if (tasktype == "classif") {
+    ntree = ncol(preds$individual)
+    nobs = nrow(preds$individual)
     num_levels = nlevels(preds$aggr)
     pred_levels = levels(preds$aggr)
     prob_array = array(data = NA, dim = c(nobs, ntree, num_levels), dimnames = list(NULL, NULL, pred_levels))
     for(i in 1:length(pred_levels)) {
       predis = (preds$individual == pred_levels[i]) * 1
       predis = predis * ((inbag == 0) * 1) # only use observations that are out of bag
-      predis = rowCumsums(predis)
-      prob_array[, , i] = predis * (1 / rowCumsums((inbag == 0) * 1)) # divide by the number of observations that are out of bag
-      #prob_array[, , i] = predis %*% diag(1/(1:ntree))
+      prob_array[, , i] = rowCumsums(predis) * (1 / rowCumsums((inbag == 0) * 1)) # divide by the number of observations that are out of bag
     }
     result = data.frame(t(apply(prob_array, 2, function(x) calculateMlrMeasure(x, measures, task, truth, predict.type = "prob"))))
   }
   
   if (tasktype == "regr") {
-    preds$individual[inbag!=0] = 0 # only use observations that are out of bag
+    preds$individual = preds$individual * ((inbag == 0) * 1) # only use observations that are out of bag
     predis = rowCumsums(preds$individual) * (1 / rowCumsums((inbag == 0) * 1))
     result = data.frame(t(apply(predis, 2, function(x) calculateMlrMeasure(x, measures, task, truth, predict.type = "response"))))
   }
   return(result)
 }
 
+
 calculateMlrMeasure = function(x, measures, task, truth, predict.type) {
   mlrpred = mlr::makePrediction(task.desc = task$task.desc, row.names = names(truth), id = names(truth), truth = truth,
-    predict.type = predict.type, predict.threshold = 0.5, y = x, time = NA)
+    predict.type = predict.type, predict.threshold = NULL, y = x, time = NA)
   performance(mlrpred, measures)
 }
 
