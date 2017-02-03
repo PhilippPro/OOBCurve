@@ -4,12 +4,14 @@ With the help of this package the out of bag learning curve for random forests
 can be created for any measure that is available in the mlr package.
 
 Installation: 
-    ```r
+
+    ```splus
     devtools::install_github("PhilippPro/OOBCurve")
     ```
 
 Examples: 
-    ```r
+
+    ```splus
     library(mlr)
     library(randomForest)
  
