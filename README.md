@@ -5,13 +5,13 @@ can be created for any measure that is available in the mlr package.
 
 Installation: 
 
-    ```splus
+    ```R
     devtools::install_github("PhilippPro/OOBCurve")
     ```
 
 Examples: 
 
-    ```splus
+    ```R
     library(mlr)
     library(randomForest)
  
