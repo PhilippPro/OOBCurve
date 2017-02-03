@@ -5,7 +5,7 @@ Version: 0.1
 Date: 2017-01-25
 Author: Philipp Probst
 Maintainer: Philipp Probst <philipp_probst@gmx.de>
-Description: The package provides a function to calculate the out of bag learning curve for random forests for any measure that is available in the mlr package.  
+Description: The package provides a function to calculate the out-of-bag learning curve for random forests for any measure that is available in the mlr package.  
 License: What license is it under?
 Depends:
     R (>= 3.0.2)
