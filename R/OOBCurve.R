@@ -20,7 +20,7 @@
 #' # Classification
 #' data = getTaskData(sonar.task)
 #' mod = randomForest(Class ~., data = data, ntree = 100, keep.inbag = TRUE)
-#' results = OOBCurve(mod, measures = list(mmce, auc, brier), task = sonar.task)
+#' results = OOBCurve(mod, measures = list(mmce, auc, brier), task = sonar.task, data = data)
 #' # Plot the generated results
 #' plot(results$mmce, type = "l", ylab = "oob-mmce", xlab = "ntrees")
 #' plot(results$auc, type = "l", ylab = "oob-auc", xlab = "ntrees")
@@ -28,7 +28,7 @@
 #' 
 #' # Regression
 #' data = getTaskData(bh.task)
-#' mod = randomForest(medv ~., data = data, ntree = 100, keep.inbag = TRUE)
+#' mod = randomForest(medv ~., data = data, ntree = 100, keep.inbag = TRUE, data = data)
 #' results = OOBCurve(mod, measures = list(mse, mae), task = bh.task)
 # Plot the generated results
 #' plot(results$mse, type = "l", ylab = "oob-mse", xlab = "ntrees")
@@ -61,7 +61,6 @@ OOBCurve = function(mod, measures = list(auc), task, data) {
   }
   return(result)
 }
-
 
 calculateMlrMeasure = function(x, measures, task, truth, predict.type) {
   mlrpred = mlr::makePrediction(task.desc = task$task.desc, row.names = names(truth), id = names(truth), truth = truth,
