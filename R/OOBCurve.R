@@ -5,14 +5,18 @@
 #' can be created for any measure that is available in the mlr package.  
 #'
 #' @param mod
-#'   An object of class randomForest, as that created by the function randomForest with option keep.inbag = TRUE
+#'   An object of class randomForest or ranger, as that created by the function randomForest/ranger with option keep.inbag = TRUE
 #' @param measures
 #'   List of performance measure(s) of mlr to evaluate. Default is auc only.
 #' @param task
 #'   Learning task created by the function makeClassifTask or makeRegrTask of mlr. 
+#' @param data
+#'   Original data that was used for training the random forest. 
 #' @return
 #'   Returns a dataframe with a column for each desired measure.
 #' @export
+#' @importFrom mlr auc
+#' @importFrom stats predict
 #' @examples
 #' library(ranger)
 #' library(randomForest)
@@ -40,13 +44,13 @@
 #' plot(results$mse, type = "l", ylab = "oob-mse", xlab = "ntrees")
 #' plot(results$mae, type = "l", ylab = "oob-mae", xlab = "ntrees")
 #' 
-OOBCurve = function(mod, measures = list(auc), task, data) {
+OOBCurve = function(mod, measures = list(mlr::auc), task, data) {
   UseMethod("OOBCurve")
 }
 
 #' @export
-OOBCurve.randomForest.formula = function(mod, measures = list(auc), task, data) {
-  tasktype = getTaskType(task)
+OOBCurve.randomForest.formula = function(mod, measures = measures, task, data) {
+  tasktype = mlr::getTaskType(task)
   truth = mod$y
   preds = predict(mod, newdata = data, predict.all = TRUE)
   inbag = mod$inbag
@@ -74,9 +78,9 @@ OOBCurve.randomForest.formula = function(mod, measures = list(auc), task, data) 
 }
 
 #' @export
-OOBCurve.ranger = function(mod, measures = list(auc), task, data) {
-  tasktype = getTaskType(task)
-  truth = getTaskTargets(task)
+OOBCurve.ranger = function(mod, measures = measures, task, data) {
+  tasktype = mlr::getTaskType(task)
+  truth = mlr::getTaskTargets(task)
   preds = predict(mod, data = data, predict.all = TRUE)
   inbag = do.call(cbind, mod$inbag.counts)
   
@@ -104,7 +108,7 @@ OOBCurve.ranger = function(mod, measures = list(auc), task, data) {
 calculateMlrMeasure = function(x, measures, task, truth, predict.type) {
   mlrpred = mlr::makePrediction(task.desc = task$task.desc, row.names = names(truth), id = names(truth), truth = truth,
     predict.type = predict.type, predict.threshold = NULL, y = x, time = NA)
-  performance(mlrpred, measures)
+  mlr::performance(mlrpred, measures)
 }
 
 rowCumsums = function(x) {
