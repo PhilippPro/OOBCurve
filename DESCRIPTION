@@ -1,15 +1,22 @@
 Package: OOBCurve
 Type: Package
 Title: Out Of Bag Learning Curve
-Version: 0.1
-Date: 2017-02-14
-Author: Philipp Probst
-Maintainer: Philipp Probst <philipp_probst@gmx.de>
-Description: The package provides a function to calculate the out-of-bag learning curve for random forests for any measure that is available in the mlr package.  
+Description: The package provides a function to calculate the out-of-bag
+    learning curve for random forests for any measure that is available in the mlr
+    package.
+Authors@R: person("Philipp", "Probst", email = "philipp_probst@gmx.de", role = c("aut", "cre"))
+URL: https://github.com/PhilippPro/OOBCurve
+BugReports: https://github.com/PhilippPro/OOBCurve/issues
 License: GPL-3
+Encoding: UTF-8
 Depends:
     R (>= 3.0.2),
     mlr (>= 2.0)
 Imports:
     randomForest,
     ranger
+LazyData: yes
+ByteCompile: yes
+Version: 0.1
+Date: 2017-02-14
+RoxygenNote: 5.0.1

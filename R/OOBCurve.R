@@ -78,7 +78,7 @@ OOBCurve.ranger = function(mod, measures = list(auc), task, data) {
   tasktype = getTaskType(task)
   truth = getTaskTargets(task)
   preds = predict(mod, data = data, predict.all = TRUE)
-  inbag = do.call(cbind, mod$inbag.counts) 
+  inbag = do.call(cbind, mod$inbag.counts)
   
   if (tasktype == "classif") {
     ntree = mod$num.trees
