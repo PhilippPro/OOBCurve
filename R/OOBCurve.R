@@ -8,8 +8,10 @@
 #'   An object of class randomForest or ranger, as that created by the function randomForest/ranger with option keep.inbag = TRUE
 #' @param measures
 #'   List of performance measure(s) of mlr to evaluate. Default is auc only.
+#'   See the \href{http://mlr-org.github.io/mlr-tutorial/release/html/measures/index.html}{mlr tutorial} for a list of available measures 
+#'   for the corresponding task.
 #' @param task
-#'   Learning task created by the function makeClassifTask or makeRegrTask of mlr. 
+#'   Learning task created by the function \code{\link[mlr]{makeClassifTask}} or \code{\link[mlr]{makeRegrTask}} of \href{https://github.com/mlr-org/mlr}{mlr}. 
 #' @param data
 #'   Original data that was used for training the random forest. 
 #' @return
@@ -44,12 +46,12 @@
 #' plot(results$mse, type = "l", ylab = "oob-mse", xlab = "ntrees")
 #' plot(results$mae, type = "l", ylab = "oob-mae", xlab = "ntrees")
 #' 
-OOBCurve = function(mod, measures = list(mlr::auc), task, data) {
+OOBCurve = function(mod, measures = list(auc), task, data) {
   UseMethod("OOBCurve")
 }
 
 #' @export
-OOBCurve.randomForest.formula = function(mod, measures = measures, task, data) {
+OOBCurve.randomForest.formula = function(mod, measures = list(auc), task, data) {
   tasktype = mlr::getTaskType(task)
   truth = mod$y
   preds = predict(mod, newdata = data, predict.all = TRUE)
@@ -78,7 +80,7 @@ OOBCurve.randomForest.formula = function(mod, measures = measures, task, data) {
 }
 
 #' @export
-OOBCurve.ranger = function(mod, measures = measures, task, data) {
+OOBCurve.ranger = function(mod, measures = list(auc), task, data) {
   tasktype = mlr::getTaskType(task)
   truth = mlr::getTaskTargets(task)
   preds = predict(mod, data = data, predict.all = TRUE)

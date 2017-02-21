@@ -4,14 +4,16 @@
 \alias{OOBCurve}
 \title{Out of Bag Learning curve}
 \usage{
-OOBCurve(mod, measures = list(mlr::auc), task, data)
+OOBCurve(mod, measures = list(auc), task, data)
 }
 \arguments{
 \item{mod}{An object of class randomForest or ranger, as that created by the function randomForest/ranger with option keep.inbag = TRUE}
 
-\item{measures}{List of performance measure(s) of mlr to evaluate. Default is auc only.}
+\item{measures}{List of performance measure(s) of mlr to evaluate. Default is auc only.
+See the \href{http://mlr-org.github.io/mlr-tutorial/release/html/measures/index.html}{mlr tutorial} for a list of available measures 
+for the corresponding task.}
 
-\item{task}{Learning task created by the function makeClassifTask or makeRegrTask of mlr.}
+\item{task}{Learning task created by the function \code{\link[mlr]{makeClassifTask}} or \code{\link[mlr]{makeRegrTask}} of \href{https://github.com/mlr-org/mlr}{mlr}.}
 
 \item{data}{Original data that was used for training the random forest.}
 }
@@ -50,4 +52,3 @@ plot(results$mse, type = "l", ylab = "oob-mse", xlab = "ntrees")
 plot(results$mae, type = "l", ylab = "oob-mae", xlab = "ntrees")
 
 }
-

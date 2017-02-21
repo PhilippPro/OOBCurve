@@ -19,4 +19,5 @@ LazyData: yes
 ByteCompile: yes
 Version: 0.1
 Date: 2017-02-14
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
+Suggests: testthat
