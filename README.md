@@ -1,9 +1,9 @@
 # OOBCurve
 
 With the help of this package the out of bag learning curve for random forests 
-can be created for any measure that is available in the mlr package. 
-Supported random forest packages are randomForest and ranger and trained models of 
-these packages with the train function of mlr.
+can be created for any measure that is available in the `mlr` package. 
+Supported random forest packages are `randomForest` and `ranger` and trained models of 
+these packages with the `train` function of `mlr`.
 
 Installation: 
 
