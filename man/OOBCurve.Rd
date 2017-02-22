@@ -7,7 +7,8 @@
 OOBCurve(mod, measures = list(auc), task, data)
 }
 \arguments{
-\item{mod}{An object of class randomForest or ranger, as that created by the function randomForest/ranger with option keep.inbag = TRUE}
+\item{mod}{An object of class \code{randomForest} or \code{ranger}, as that created by the function randomForest/ranger with option \code{keep.inbag = TRUE}.
+Alternatively you can also use a randomForest or ranger model trained with \code{\link[mlr]{train}} of \href{https://github.com/mlr-org/mlr}{mlr}.}
 
 \item{measures}{List of performance measure(s) of mlr to evaluate. Default is auc only.
 See the \href{http://mlr-org.github.io/mlr-tutorial/release/html/measures/index.html}{mlr tutorial} for a list of available measures 
@@ -31,8 +32,12 @@ library(randomForest)
 # Classification
 data = getTaskData(sonar.task)
 mod = ranger(Class ~., data = data, num.trees = 100, keep.inbag = TRUE)
+
 # Alternatively use randomForest
 # mod = randomForest(Class ~., data = data, ntree = 100, keep.inbag = TRUE)
+# Alternatively use train of mlr
+# mod = train(makeLearner("classif.ranger", keep.inbag = TRUE), sonar.task)
+
 # Application of the main function
 results = OOBCurve(mod, measures = list(mmce, auc, brier), task = sonar.task, data = data)
 # Plot the generated results
@@ -43,8 +48,6 @@ plot(results$brier, type = "l", ylab = "oob-brier-score", xlab = "ntrees")
 # Regression
 data = getTaskData(bh.task)
 mod = ranger(medv ~., data = data, num.trees = 100, keep.inbag = TRUE)
-# Alternatively use randomForest
-# mod = randomForest(medv ~., data = data, ntree = 100, keep.inbag = TRUE)
 # Application of the main function
 results = OOBCurve(mod, measures = list(mse, mae), task = bh.task, data = data)
 # Plot the generated results

@@ -57,3 +57,16 @@ test_that("regression randomForest", {
   expect_true(any(is.na(results[, 1])))
   expect_true(any(is.na(results[, 2])))
 })
+
+test_that("trained model with mlr", {
+  num.trees = 200
+  data = getTaskData(sonar.task)
+  mod = train(makeLearner("classif.ranger", keep.inbag = TRUE, num.trees = num.trees), sonar.task)
+  measures = list(mmce, auc, brier)
+  results = OOBCurve(mod, measures = measures, task = sonar.task, data = data)
+  
+  expect_true(is.data.frame(results))
+  expect_equal(dim(results), c(num.trees, length(measures)))
+  expect_false(any(is.na(results[, 1:2])))
+  expect_true(any(is.na(results[, 3])))
+})

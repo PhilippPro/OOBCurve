@@ -18,8 +18,12 @@ library(randomForest)
 # Classification
 data = getTaskData(sonar.task)
 mod = ranger(Class ~., data = data, num.trees = 100, keep.inbag = TRUE)
+
 # Alternatively use randomForest
 # mod = randomForest(Class ~., data = data, ntree = 100, keep.inbag = TRUE)
+# Alternatively use train of mlr
+# mod = train(makeLearner("classif.ranger", keep.inbag = TRUE), sonar.task)
+
 # Application of the main function
 results = OOBCurve(mod, measures = list(mmce, auc, brier), task = sonar.task, data = data)
 # Plot the generated results
@@ -30,8 +34,6 @@ plot(results$brier, type = "l", ylab = "oob-brier-score", xlab = "ntrees")
 # Regression
 data = getTaskData(bh.task)
 mod = ranger(medv ~., data = data, num.trees = 100, keep.inbag = TRUE)
-# Alternatively use randomForest
-# mod = randomForest(medv ~., data = data, ntree = 100, keep.inbag = TRUE)
 # Application of the main function
 results = OOBCurve(mod, measures = list(mse, mae), task = bh.task, data = data)
 # Plot the generated results
