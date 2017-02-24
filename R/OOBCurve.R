@@ -2,10 +2,11 @@
 #'
 #' @description
 #' With the help of this function the out of bag learning curve for random forests 
-#' can be created for any measure that is available in the mlr package.  
+#' can be created for any measure that is available in the mlr package. 
 #'
 #' @param mod
-#'   An object of class \code{randomForest} or \code{ranger}, as that created by the function randomForest/ranger with option \code{keep.inbag = TRUE}.
+#'   An object of class \code{randomForest} or \code{ranger}, as that created by the 
+#'   function \code{\link[randomForest]{randomForest}}/\code{\link[ranger]{ranger}} with option \code{keep.inbag = TRUE}.
 #'   Alternatively you can also use a randomForest or ranger model trained with \code{\link[mlr]{train}} of \href{https://github.com/mlr-org/mlr}{mlr}. 
 #' @param measures
 #'   List of performance measure(s) of mlr to evaluate. Default is auc only.

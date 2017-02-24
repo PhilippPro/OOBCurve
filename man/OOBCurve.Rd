@@ -7,7 +7,8 @@
 OOBCurve(mod, measures = list(auc), task, data)
 }
 \arguments{
-\item{mod}{An object of class \code{randomForest} or \code{ranger}, as that created by the function randomForest/ranger with option \code{keep.inbag = TRUE}.
+\item{mod}{An object of class \code{randomForest} or \code{ranger}, as that created by the 
+function \code{\link[randomForest]{randomForest}}/\code{\link[ranger]{ranger}} with option \code{keep.inbag = TRUE}.
 Alternatively you can also use a randomForest or ranger model trained with \code{\link[mlr]{train}} of \href{https://github.com/mlr-org/mlr}{mlr}.}
 
 \item{measures}{List of performance measure(s) of mlr to evaluate. Default is auc only.
