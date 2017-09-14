@@ -56,9 +56,10 @@ lrn = makeLearner("regr.ranger", keep.inbag = TRUE, par.vals = list(num.trees = 
 mod = train(lrn, bh.task)
 
 # Application of the main function
-results = OOBCurve(mod, measures = list(mse, mae), task = bh.task, data = data)
+results = OOBCurve(mod, measures = list(mse, mae, rsq), task = bh.task, data = data)
 # Plot the generated results
 plot(results$mse, type = "l", ylab = "oob-mse", xlab = "ntrees")
 plot(results$mae, type = "l", ylab = "oob-mae", xlab = "ntrees")
+plot(results$rsq, type = "l", ylab = "oob-mae", xlab = "ntrees")
 
 }
