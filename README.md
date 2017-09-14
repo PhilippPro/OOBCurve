@@ -15,17 +15,19 @@ devtools::install_github("PhilippPro/OOBCurve")
 Examples: 
 
 ```R
+library(mlr)
 library(ranger)
-library(randomForest)
 
 # Classification
 data = getTaskData(sonar.task)
-mod = ranger(Class ~., data = data, num.trees = 100, keep.inbag = TRUE)
+sonar.task = makeClassifTask(data = data, target = "Class")
+lrn = makeLearner("classif.ranger", keep.inbag = TRUE, par.vals = list(num.trees = 100))
+mod = train(lrn, sonar.task)
 
+# Alternatively use ranger directly
+# mod = ranger(Class ~., data = data, num.trees = 100, keep.inbag = TRUE)
 # Alternatively use randomForest
 # mod = randomForest(Class ~., data = data, ntree = 100, keep.inbag = TRUE)
-# Alternatively use train of mlr
-# mod = train(makeLearner("classif.ranger", keep.inbag = TRUE), sonar.task)
 
 # Application of the main function
 results = OOBCurve(mod, measures = list(mmce, auc, brier), task = sonar.task, data = data)
@@ -36,11 +38,15 @@ plot(results$brier, type = "l", ylab = "oob-brier-score", xlab = "ntrees")
 
 # Regression
 data = getTaskData(bh.task)
-mod = ranger(medv ~., data = data, num.trees = 100, keep.inbag = TRUE)
+bh.task = makeRegrTask(data = data, target = "medv")
+lrn = makeLearner("regr.ranger", keep.inbag = TRUE, par.vals = list(num.trees = 100))
+mod = train(lrn, bh.task)
+
 # Application of the main function
-results = OOBCurve(mod, measures = list(mse, mae), task = bh.task, data = data)
+results = OOBCurve(mod, measures = list(mse, mae, rsq), task = bh.task, data = data)
 # Plot the generated results
 plot(results$mse, type = "l", ylab = "oob-mse", xlab = "ntrees")
 plot(results$mae, type = "l", ylab = "oob-mae", xlab = "ntrees")
+plot(results$rsq, type = "l", ylab = "oob-mae", xlab = "ntrees")
 ```
 
