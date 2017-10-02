@@ -70,3 +70,17 @@ test_that("trained model with mlr", {
   expect_false(any(is.na(results[, 1:2])))
   expect_true(any(is.na(results[, 3])))
 })
+
+test_that("OOBCurvePars", {
+  num.trees = 200
+  data = getTaskData(sonar.task)
+  mod = makeLearner("classif.ranger", num.trees = num.trees, predict.type = "prob")
+  measures = list(mmce, auc, brier)
+  nr.grid = 11
+  results = OOBCurvePars(mod, task = sonar.task, pars = "min.node.size", nr.grid = nr.grid, measures = measures)
+  
+  expect_true(is.numeric(results$par.vals))
+  expect_true(is.data.frame(results$performances))
+  expect_equal(dim(results$performances), c(nr.grid, length(measures)))
+  expect_false(any(is.na(results$performances)))
+})

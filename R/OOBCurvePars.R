@@ -25,35 +25,36 @@
 #'
 #' @examples
 #' library(mlr)
-#' lrn = makeLearner("classif.ranger", predict.type = "prob", num.trees = 1000)
 #' task = sonar.task
-#' perfs = OOBCurvePars(lrn, task)
-#' plot(perfs$par.vals, unlist(perfs$perfs), type = "l", xlab = "mtry", ylab = "mmce")
+#' 
+#' lrn = makeLearner("classif.ranger", predict.type = "prob", num.trees = 1000)
+#' results = OOBCurvePars(lrn, task, measures = list(auc))
+#' plot(results$par.vals, results$performances$auc, type = "l", xlab = "mtry", ylab = "auc")
 #' 
 #' lrn = makeLearner("classif.ranger", predict.type = "prob", num.trees = 1000, replace = FALSE)
-#' perfs = OOBCurvePars(lrn, task, pars = "sample.fraction")
-#' plot(perfs$par.vals, unlist(perfs$perfs), type = "l", xlab = "sample.fraction", ylab = "mmce")
-#'
-#' perfs = OOBCurvePars(lrn, task, pars = "min.node.size")
-#' plot(perfs$par.vals, unlist(perfs$perfs), type = "l", xlab = "min.node.size", ylab = "mmce")
-OOBCurvePars = function(lrn, task, pars = c("mtry"), nr.grid = 10, par.vals = NULL, measures) {
+#' results = OOBCurvePars(lrn, task, pars = "sample.fraction", measures = list(mmce))
+#' plot(results$par.vals, results$performances$mmce, type = "l", xlab = "sample.fract.", ylab = "mmce")
+#' 
+#' results = OOBCurvePars(lrn, task, pars = "min.node.size", measures = list(mmce))
+#' plot(results$par.vals, results$performances$mmce, type = "l", xlab = "min.node.size", ylab = "mmce")
+OOBCurvePars = function(lrn, task, pars = c("mtry"), nr.grid = 10, par.vals = NULL, measures = list(auc)) {
   if (is.null(par.vals)) {
   if(pars == "mtry") {
     nfeats = mlr::getTaskNFeats(task)
-    par.vals = round(seq(1, nfeats, length.out = 10))
+    par.vals = round(seq(1, nfeats, length.out = nr.grid))
   } 
   if(pars == "sample.fraction") {
-    par.vals = seq(0.05, 1, length.out = 10)
+    par.vals = seq(0.05, 1, length.out = nr.grid)
   }
   if(pars == "min.node.size") {
     n = mlr::getTaskSize(task)
     nodesize_max = trafo_nodesize_end(1, n)
-    par.vals = round(seq(1, nodesize_max, length.out = 10))
+    par.vals = round(seq(1, nodesize_max, length.out = nr.grid))
   }
   par.vals = unique(par.vals)    
   }
   
-  perfs = list()
+  performances = list()
   for(i in seq_along(par.vals)) {
     print(paste0("Iteration ", i, " of ", length(par.vals), ": Training parameter ", pars, "=", round(par.vals[i], 3)))
     par.vals.i = list(par.vals[i])
@@ -61,14 +62,13 @@ OOBCurvePars = function(lrn, task, pars = c("mtry"), nr.grid = 10, par.vals = NU
     lrn = mlr::setHyperPars(lrn, par.vals = par.vals.i)
     mod = mlr::train(lrn, task)
     oob = mlr::getOOBPreds(mod, task)
-    perfs[[i]] = mlr::performance(oob)
+    performances[[i]] = mlr::performance(oob, measures = measures)
   }
+  performances = data.frame(do.call(rbind, performances))
+  rownames(performances) = paste0(pars, "=", round(par.vals, 3))
   
-  list(par.vals = par.vals, perfs = perfs)
+  list(par.vals = par.vals, performances = performances)
 }
 
 trafo_nodesize_end = function(x, size) ceiling(2^(log(size * 0.2, 2) * x))
-
-
-
 

@@ -5,7 +5,7 @@
 \title{OOBCurvePars}
 \usage{
 OOBCurvePars(lrn, task, pars = c("mtry"), nr.grid = 10, par.vals = NULL,
-  measures)
+  measures = list(auc))
 }
 \arguments{
 \item{lrn}{The learner created with \code{\link[mlr]{makeLearner}}. Currently only \code{\link[ranger]{ranger}} is supported. 
@@ -32,15 +32,16 @@ min.node.size of random forests can be created for any measure that is available
 }
 \examples{
 library(mlr)
-lrn = makeLearner("classif.ranger", predict.type = "prob", num.trees = 1000)
 task = sonar.task
-perfs = OOBCurvePars(lrn, task)
-plot(perfs$par.vals, unlist(perfs$perfs), type = "l", xlab = "mtry", ylab = "mmce")
+
+lrn = makeLearner("classif.ranger", predict.type = "prob", num.trees = 1000)
+results = OOBCurvePars(lrn, task, measures = list(auc))
+plot(results$par.vals, results$performances$auc, type = "l", xlab = "mtry", ylab = "auc")
 
 lrn = makeLearner("classif.ranger", predict.type = "prob", num.trees = 1000, replace = FALSE)
-perfs = OOBCurvePars(lrn, task, pars = "sample.fraction")
-plot(perfs$par.vals, unlist(perfs$perfs), type = "l", xlab = "sample.fraction", ylab = "mmce")
+results = OOBCurvePars(lrn, task, pars = "sample.fraction", measures = list(mmce))
+plot(results$par.vals, results$performances$mmce, type = "l", xlab = "sample.fract.", ylab = "mmce")
 
-perfs = OOBCurvePars(lrn, task, pars = "min.node.size")
-plot(perfs$par.vals, unlist(perfs$perfs), type = "l", xlab = "min.node.size", ylab = "mmce")
+results = OOBCurvePars(lrn, task, pars = "min.node.size", measures = list(mmce))
+plot(results$par.vals, results$performances$mmce, type = "l", xlab = "min.node.size", ylab = "mmce")
 }
