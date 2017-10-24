@@ -6,7 +6,7 @@
 #'
 #' @param lrn
 #'   The learner created with \code{\link[mlr]{makeLearner}}. Currently only \code{\link[ranger]{ranger}} is supported. 
-#'   Ntree has to be set sufficiently high to produce smooth curves.  
+#'   num.trees has to be set sufficiently high to produce smooth curves.  
 #' @param task
 #'   Learning task created by the function \code{\link[mlr]{makeClassifTask}} or \code{\link[mlr]{makeRegrTask}} of \href{https://github.com/mlr-org/mlr}{mlr}. 
 #' @param pars

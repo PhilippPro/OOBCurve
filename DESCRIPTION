@@ -1,7 +1,7 @@
 Package: OOBCurve
 Type: Package
 Title: Out of Bag Learning Curve
-Description: Provides a function to calculate the out-of-bag learning curve for random forests for any measure that is available in the 'mlr' package. Supported random forest packages are 'randomForest' and 'ranger' and trained models of these packages with the train function of 'mlr'.
+Description: Provides functions to calculate the out-of-bag learning curve for random forests for any measure that is available in the 'mlr' package. Supported random forest packages are 'randomForest' and 'ranger' and trained models of these packages with the train function of 'mlr'. The main function is OOBCurve that calculates the out-of-bag curve depending on the number of trees. With the OOBCurvePars function out-of-bag curves can also be calculated for mtry, sample.fraction and min.node.size for the ranger package.
 Authors@R: person("Philipp", "Probst", email = "philipp_probst@gmx.de", role = c("aut", "cre"))
 URL: https://github.com/PhilippPro/OOBCurve
 BugReports: https://github.com/PhilippPro/OOBCurve/issues
