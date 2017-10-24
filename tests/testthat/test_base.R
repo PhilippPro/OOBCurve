@@ -7,7 +7,7 @@ context("Output check")
 test_that("classification ranger", {
   num.trees = 200
   data = getTaskData(sonar.task)
-  mod = ranger(Class ~., data = data, num.trees = num.trees, keep.inbag = TRUE)
+  mod = ranger::ranger(Class ~., data = data, num.trees = num.trees, keep.inbag = TRUE)
   measures = list(mmce, auc, brier)
   results = OOBCurve(mod, measures = measures, task = sonar.task, data = data)
   
@@ -19,8 +19,8 @@ test_that("classification ranger", {
 
 test_that("regression ranger", {
   num.trees = 200
-  data = getTaskData(bh.task)
-  mod = ranger(medv ~., data = data, num.trees = num.trees, keep.inbag = TRUE)
+  data = mlr::getTaskData(bh.task)
+  mod = ranger::ranger(medv ~., data = data, num.trees = num.trees, keep.inbag = TRUE)
   measures = list(mse, mae)
   results = OOBCurve(mod, measures = measures, task = bh.task, data = data)
 
@@ -33,8 +33,8 @@ test_that("regression ranger", {
 test_that("classification randomForest", {
   ntree = 200
   # Classification
-  data = getTaskData(sonar.task)
-  mod = randomForest(Class ~., data = data, ntree = ntree, keep.inbag = TRUE)
+  data = mlr::getTaskData(sonar.task)
+  mod = randomForest::randomForest(Class ~., data = data, ntree = ntree, keep.inbag = TRUE)
   # Application of the main function
   measures = list(mmce, auc, brier)
   results = OOBCurve(mod, measures = measures, task = sonar.task, data = data)
@@ -47,8 +47,8 @@ test_that("classification randomForest", {
 
 test_that("regression randomForest", {
   ntree = 200
-  data = getTaskData(bh.task)
-  mod = randomForest(medv ~., data = data, ntree = ntree, keep.inbag = TRUE)
+  data = mlr::getTaskData(bh.task)
+  mod = randomForest::randomForest(medv ~., data = data, ntree = ntree, keep.inbag = TRUE)
   measures = list(mse, mae)
   results = OOBCurve(mod, measures = measures, task = bh.task, data = data)
   
@@ -60,8 +60,8 @@ test_that("regression randomForest", {
 
 test_that("trained model with mlr", {
   num.trees = 200
-  data = getTaskData(sonar.task)
-  mod = train(makeLearner("classif.ranger", keep.inbag = TRUE, num.trees = num.trees), sonar.task)
+  data = mlr::getTaskData(sonar.task)
+  mod = mlr::train(makeLearner("classif.ranger", keep.inbag = TRUE, num.trees = num.trees), sonar.task)
   measures = list(mmce, auc, brier)
   results = OOBCurve(mod, measures = measures, task = sonar.task, data = data)
   
@@ -73,8 +73,8 @@ test_that("trained model with mlr", {
 
 test_that("OOBCurvePars", {
   num.trees = 200
-  data = getTaskData(sonar.task)
-  mod = makeLearner("classif.ranger", num.trees = num.trees, predict.type = "prob")
+  data = mlr::getTaskData(sonar.task)
+  mod = mlr::makeLearner("classif.ranger", num.trees = num.trees, predict.type = "prob")
   measures = list(mmce, auc, brier)
   nr.grid = 11
   results = OOBCurvePars(mod, task = sonar.task, pars = "min.node.size", nr.grid = nr.grid, measures = measures)

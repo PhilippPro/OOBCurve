@@ -31,6 +31,7 @@ With the help of this function the out of bag curves for parameters like mtry, s
 min.node.size of random forests can be created for any measure that is available in the mlr package.
 }
 \examples{
+\dontrun{
 library(mlr)
 task = sonar.task
 
@@ -43,5 +44,5 @@ results = OOBCurvePars(lrn, task, pars = "sample.fraction", measures = list(mmce
 plot(results$par.vals, results$performances$mmce, type = "l", xlab = "sample.fract.", ylab = "mmce")
 
 results = OOBCurvePars(lrn, task, pars = "min.node.size", measures = list(mmce))
-plot(results$par.vals, results$performances$mmce, type = "l", xlab = "min.node.size", ylab = "mmce")
+plot(results$par.vals, results$performances$mmce, type = "l", xlab = "min.node.size", ylab = "mmce")}
 }

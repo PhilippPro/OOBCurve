@@ -24,6 +24,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library(mlr)
 #' task = sonar.task
 #' 
@@ -36,17 +37,17 @@
 #' plot(results$par.vals, results$performances$mmce, type = "l", xlab = "sample.fract.", ylab = "mmce")
 #' 
 #' results = OOBCurvePars(lrn, task, pars = "min.node.size", measures = list(mmce))
-#' plot(results$par.vals, results$performances$mmce, type = "l", xlab = "min.node.size", ylab = "mmce")
+#' plot(results$par.vals, results$performances$mmce, type = "l", xlab = "min.node.size", ylab = "mmce")}
 OOBCurvePars = function(lrn, task, pars = c("mtry"), nr.grid = 10, par.vals = NULL, measures = list(auc)) {
   if (is.null(par.vals)) {
-  if(pars == "mtry") {
+  if (pars == "mtry") {
     nfeats = mlr::getTaskNFeats(task)
     par.vals = round(seq(1, nfeats, length.out = nr.grid))
   } 
-  if(pars == "sample.fraction") {
+  if (pars == "sample.fraction") {
     par.vals = seq(0.05, 1, length.out = nr.grid)
   }
-  if(pars == "min.node.size") {
+  if (pars == "min.node.size") {
     n = mlr::getTaskSize(task)
     nodesize_max = trafo_nodesize_end(1, n)
     par.vals = round(seq(1, nodesize_max, length.out = nr.grid))
