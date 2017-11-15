@@ -22,7 +22,7 @@
 #' @return 
 #'   Returns a list with parameter values and a list of performances.
 #' @export
-#'
+#' @seealso \code{\link{OOBCurve}} for out-of-bag curves dependent on the number of trees.
 #' @examples
 #' \dontrun{
 #' library(mlr)

@@ -46,3 +46,6 @@ plot(results$par.vals, results$performances$mmce, type = "l", xlab = "sample.fra
 results = OOBCurvePars(lrn, task, pars = "min.node.size", measures = list(mmce))
 plot(results$par.vals, results$performances$mmce, type = "l", xlab = "min.node.size", ylab = "mmce")}
 }
+\seealso{
+\code{\link{OOBCurve}} for out-of-bag curves dependent on the number of trees.
+}

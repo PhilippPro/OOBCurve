@@ -21,6 +21,7 @@
 #' @export
 #' @importFrom mlr auc
 #' @importFrom stats predict
+#' @seealso \code{\link{OOBCurvePars}} for out-of-bag curves of other parameters.
 #' @examples
 #' 
 #' library(mlr)

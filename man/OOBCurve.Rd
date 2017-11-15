@@ -63,3 +63,6 @@ plot(results$mae, type = "l", ylab = "oob-mae", xlab = "ntrees")
 plot(results$rsq, type = "l", ylab = "oob-mae", xlab = "ntrees")
 
 }
+\seealso{
+\code{\link{OOBCurvePars}} for out-of-bag curves of other parameters.
+}
