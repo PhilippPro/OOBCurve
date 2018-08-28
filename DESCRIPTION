@@ -15,7 +15,7 @@ Imports:
     ranger
 LazyData: yes
 ByteCompile: yes
-Version: 0.2
-Date: 2017-10-24
+Version: 0.3
+Date: 2018-08-28
 RoxygenNote: 6.0.1
 Suggests: testthat
