@@ -16,6 +16,6 @@ Imports:
 LazyData: yes
 ByteCompile: yes
 Version: 0.3
-Date: 2018-08-28
+Date: 2018-08-30
 RoxygenNote: 6.0.1
 Suggests: testthat
