@@ -10,7 +10,7 @@
 #'   Alternatively you can also use a randomForest or ranger model trained with \code{\link[mlr]{train}} of \href{https://github.com/mlr-org/mlr}{mlr}. 
 #' @param measures
 #'   List of performance measure(s) of mlr to evaluate. Default is auc only.
-#'   See the \href{http://mlr-org.github.io/mlr-tutorial/release/html/measures/index.html}{mlr tutorial} for a list of available measures 
+#'   See the \href{https://mlr-org.github.io/mlr/articles/measures.html}{mlr tutorial} for a list of available measures 
 #'   for the corresponding task.
 #' @param task
 #'   Learning task created by the function \code{\link[mlr]{makeClassifTask}} or \code{\link[mlr]{makeRegrTask}} of \href{https://github.com/mlr-org/mlr}{mlr}. 

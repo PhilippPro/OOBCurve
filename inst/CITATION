@@ -1,0 +1,17 @@
+bref = c(
+  bibentry(
+    bibtype = "Article",
+    key = "OOBCurve",
+    title = "To Tune or Not to Tune the Number of Trees in Random Forest",
+    author = c(
+      person("Philipp", "Probst"),
+      person("Anne-Laure", "Boulesteix")
+    ),
+    journal = "Journal of Machine Learning Research",
+    year = 2018L,
+    volume = 18L,
+    number = 181L,
+    pages = "1-18",
+    url = "http://jmlr.org/papers/v18/17-269.html"
+  )
+)

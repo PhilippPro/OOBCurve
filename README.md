@@ -4,7 +4,7 @@ With the help of this package the out of bag learning curve for random forests
 can be created for any measure that is available in the `mlr` package. 
 
 Supported random forest packages are `randomForest` and `ranger` and trained models of 
-these packages with the `train` function of `mlr`. Available measures can be looked up on the mlr [tutorial page](http://mlr-org.github.io/mlr-tutorial/release/html/measures/index.html).
+these packages with the `train` function of `mlr`. Available measures can be looked up on the mlr [tutorial page](https://mlr-org.github.io/mlr/articles/measures.html).
 
 The main function is `OOBCurve` that calculates the out-of-bag curve depending on the number of trees.
 With the `OOBCurvePars` function out-of-bag curves can also be calculated for mtry, sample.fraction and min.node.size for the ranger package.
